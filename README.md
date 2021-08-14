@@ -1,2 +1,2 @@
 # ElloMate-chatapp-Backend
-backend for my new web based social media application
+RestApi for my new web based social media application
