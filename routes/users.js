@@ -72,7 +72,7 @@ router.put("/:id/follow", async (req, res, next) => {
             $push: { followers: req.body.userId },
           });
           await currentUser.updateOne({
-            $push: { following: req.body.userId },
+            $push: { following: req.params.id },
           });
           res.status(200).json("Now you can watch their sh*t!");
         } else {
@@ -85,6 +85,35 @@ router.put("/:id/follow", async (req, res, next) => {
       }
     } else {
       res.status(403).json("What a narcissist");
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+// unfollow
+router.put("/:id/unfollow", async (req, res, next) => {
+  try {
+    if (req.body.userId !== req.params.id) {
+      try {
+        const userToUnFollow = await userModel.findById(req.params.id);
+        const currentUser = await userModel.findById(req.body.userId);
+        if (userToUnFollow.followers.includes(req.body.userId)) {
+          await userToUnFollow.updateOne({
+            $pull: { followers: req.body.userId },
+          });
+          await currentUser.updateOne({
+            $pull: { following: req.params.id },
+          });
+          res.status(200).json("You unfollowed");
+        } else {
+          res.send(403).json("You have to follow first da!");
+        }
+      } catch (error) {
+        res.status(500).json(error);
+      }
+    } else {
+      res.status(403).json("You can't run away from yourself");
     }
   } catch (error) {
     next(error);

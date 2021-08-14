@@ -7,6 +7,8 @@ const morgan = require("morgan");
 const cors = require("cors");
 const router = require("./routes/users");
 const auth = require("./routes/auth");
+const feed = require("./routes/feed");
+
 dotenv.config();
 port = process.env.PORT || 9000;
 
@@ -24,6 +26,7 @@ app.use(morgan("common"));
 
 app.use("/api/user", router);
 app.use("/api/auth", auth);
+app.use("/api/feed", feed);
 
 app.listen(port, () => {
   console.log("server@ 8000");
