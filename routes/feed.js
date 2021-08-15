@@ -75,10 +75,10 @@ router.get("/:id", async (req, res, next) => {
 });
 // get posts
 
-router.get("/feeds/all", async (req, res, next) => {
+router.get("/feeds/:userId", async (req, res, next) => {
   try {
     try {
-      const currentUser = await userModel.findById(req.body.userId);
+      const currentUser = await userModel.findById(req.params.userId);
       const getPosts = await feedModel.find({ userId: currentUser._id });
       const friendPosts = await Promise.all(
         currentUser.following.map((friendId) => {

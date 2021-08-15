@@ -29,5 +29,5 @@ app.use("/api/auth", auth);
 app.use("/api/feed", feed);
 
 app.listen(port, () => {
-  console.log("server@ 8000");
+  console.log("server@ 9000");
 });
