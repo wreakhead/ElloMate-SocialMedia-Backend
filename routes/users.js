@@ -8,7 +8,7 @@ router.put("/:id", async (req, res, next) => {
     if (req.body.userId === req.params.id || req.body.isAdmin) {
       if (req.body.password) {
         try {
-          const salt = await bcrypt.genSalt(12);
+          const salt = await bcrypt.genSalt();
           req.body.password = await bcrypt.hash(req.body.password, salt);
         } catch (error) {
           res.status(500).json(error);
@@ -45,6 +45,25 @@ router.delete("/:id", async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// get followers
+
+router.get("followers/:userId", async (req, res, next) => {
+  try {
+    const user = await userModel.findById(req.params.userId);
+    const followers = await Promise.all(
+      user.follower.map((followerId) => {
+        return userModel.findById(followerId);
+      })
+    );
+    let followerList = [];
+    friends.map((follower) => {
+      const { _id, username, profilePicture } = follower;
+      followerList.push({ _id, username, profilePicture });
+    });
+    res, status(200).json(followerList);
+  } catch (error) {}
 });
 
 // fetch a user

@@ -7,7 +7,7 @@ router.post("/signup", async (req, res, next) => {
   try {
     const data = req.body;
     // hashing password
-    const salt = await bcrypt.genSalt(12);
+    const salt = await bcrypt.genSalt();
     const hashedPass = await bcrypt.hash(data.password, salt);
     // updating user
     const newUser = await new userModel({
@@ -27,8 +27,10 @@ router.post("/signup", async (req, res, next) => {
 router.post("/signin", async (req, res, next) => {
   try {
     const data = req.body;
+    console.log(data);
     const findUser = await userModel.findOne({ email: data.email });
     if (findUser) {
+      console.log(findUser);
       const checkPass = await bcrypt.compare(data.password, findUser.password);
       if (checkPass) {
         res.status(200).json(findUser);
